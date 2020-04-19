@@ -4,21 +4,21 @@
 
 Outils pour faciliter la création d'un bilan en ergothérapie.
 
-
 ## Cahier des charges
 
 ### Pour le patient
 
 Le patient doit pouvoir:
+
 - accéder à sa fiche de renseignements personnalisée
 - remplir sa fiche de renseignements personnalisée
 - modifier sa fiche de renseignements personnalisée
 - imprimer sa fiche de renseignements pour la remplir à la main
 
-
 ### Pour l'ergothérapeute
 
 L'ergothérapeute doit pouvoir:
+
 - remplir la fiche de renseignements de n'importe quel patient
 - remplir l'anamnèse de n'importe quel patient
 - remplir la trame de bilan de n'importe quel patient
@@ -28,11 +28,9 @@ L'ergothérapeute doit pouvoir:
 - envoyer à chaque patient un lien vers sa fiche de renseignements personnalisée
 - préremplir le bilan du patient sur base des réponses présentes dans les autres documents
 
-
 ### Sécurité
 
 - Seule la fiche de renseignements peut être accessible sans s'enregistrer
-
 
 ## Liens utiles
 
@@ -42,7 +40,6 @@ L'ergothérapeute doit pouvoir:
 - [marksup](https://github.com/bosky101/marksup)
 - [wmd fork](https://github.com/brikis98/wmd)
 
-
 ## Développement
 
 ### Objectif n.1
@@ -51,11 +48,9 @@ L'ergothérapeute doit pouvoir:
 - L'ergothérapeute peut remplir l'anamnèse pour un patient et la sauver
 - L'ergothérapeute peut remplir le bilan pour un patient et le sauver
 
-
 ### Objectif n.2
 
 - L'ergothérapeute peut préremplir les champs du bilan sur base des champs de l'anamnèse
-
 
 ### Objectif n.3
 

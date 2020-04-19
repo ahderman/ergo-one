@@ -1,0 +1,38 @@
+{
+  "name": "ergo-one",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "install-python-requirements": "pip install -r requirements.txt",
+    "get-stack-output": "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[?OutputKey==`'${OUTPUT_KEY}'`].OutputValue' --output text",
+    "build": "sam build --template infrastructure/template.yaml",
+    "deploy:dev": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 sam deploy --no-fail-on-empty-changeset",
+    "deploy:local": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 sam local start-api",
+    "build-and-deploy:dev": "npm run build && npm run deploy:dev",
+    "build-and-deploy:local": "npm run build && npm run deploy:local",
+    "get-base-url:dev": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 STACK_NAME=ergo-one-dev OUTPUT_KEY=BaseUrl npm run get-stack-output",
+    "logs": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 sam logs --stack-name ${STACK_NAME} -n ${LAMBDA_NAME}",
+    "logs:RootLambda": "cross-env STACK_NAME=ergo-one-dev LAMBDA_NAME=RootLambda npm run logs",
+    "test:local": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=http://localhost:3000 jest e2e-tests/",
+    "test:dev": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=$(npm -s run get-base-url:dev) jest e2e-tests/",
+    "test:unit": "jest lambdas/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@code.symzo.be:2222/alex.derman/ergo-one.git"
+  },
+  "author": "Alexandre D'Erman",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.656.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^5.1.0",
+    "cross-env": "^7.0.2",
+    "jest": "^25.3.0",
+    "jest-extended": "^0.11.5",
+    "prettier": "^2.0.4",
+    "superagent": "^5.2.2",
+    "url-join": "^4.0.1"
+  }
+}

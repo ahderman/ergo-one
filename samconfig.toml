@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "ergo-one-dev"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-hh0g1fowc8ki"
+s3_prefix = "ergo-one-dev"
+region = "eu-central-1"
+capabilities = "CAPABILITY_IAM"
