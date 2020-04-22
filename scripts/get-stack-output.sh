@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+
+STACK_NAME="$1"
+OUTPUT_KEY="$2"
+
+aws cloudformation describe-stacks --stack-name "${STACK_NAME}" --query 'Stacks[0].Outputs[?OutputKey==`'"${OUTPUT_KEY}"'`].OutputValue' --output text

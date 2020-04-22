@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
@@ -11,35 +11,50 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  EnvironmentName:
+    Type: String
+    AllowedValues:
+      - local
+      - dev
+
 Resources:
   HelloWorldLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ../lambdas/hello-world
+      CodeUri: ../api/hello-world
       Handler: hello-world.lambdaHandler
       Runtime: nodejs12.x
+      Environment:
+        Variables:
+          WEB_CLIENT_URL: http://localhost:8080
 
       Events:
         HelloWorldEvent:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /hello
+            Path: /api/hello
             Method: get
 
-  RootLambda:
+  AuthenticateLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ../lambdas/root
-      Handler: root.lambdaHandler
+      CodeUri: ../api/authenticate
+      Handler: authenticate.lambdaHandler
       Runtime: nodejs12.x
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref EnvironmentName
+          LOCAL_WEB_CLIENT_URL: http://localhost:8080
+          DEV_WEB_CLIENT_URL: !GetAtt WebClientBucket.WebsiteURL
 
       Events:
         RootEvent:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /
+            Path: /api/authenticate
             Method: get
 
   ApiGateway:
@@ -47,7 +62,32 @@ Resources:
     Properties:
       StageName: dev
 
+  WebClientBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  WebClientBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebClientBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: s3:GetObject
+            Principal: "*"
+            Resource: !Sub "${WebClientBucket.Arn}/*"
+
 Outputs:
-  BaseUrl:
-    Description: "API Gateway endpoint URL"
+  ApiGatewayUrl:
+    Description: "API Gateway URL"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${ApiGateway.Stage}/"
+  WebClientBucketUri:
+    Description: "Web Client Bucket URI"
+    Value: !Sub "s3://${WebClientBucket}"
+  WebClientBucketWebsiteUrl:
+    Description: "Web Client Bucket Website URL"
+    Value: !GetAtt WebClientBucket.WebsiteURL
