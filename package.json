@@ -22,7 +22,7 @@
     "test:backend:local": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=http://localhost:3000 jest e2e-tests/",
     "test:backend:dev": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=$(yarn -s get-api-gateway-url:dev) jest e2e-tests/",
     "test:backend:unit": "jest api/",
-    "export:ploup": "export PLOUP=123"
+    "lint:frontend": "cd web-client && yarn lint"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,9 @@
   "author": "Alexandre D'Erman",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.656.0"
+    "aws-sdk": "^2.656.0",
+    "cookie": "^0.4.1",
+    "vue-feather-icons": "^5.0.0"
   },
   "devDependencies": {
     "aws-sdk-mock": "^5.1.0",

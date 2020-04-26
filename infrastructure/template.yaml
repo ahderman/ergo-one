@@ -57,6 +57,60 @@ Resources:
             Path: /api/authenticate
             Method: get
 
+  LoginLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/login
+      Handler: login.lambdaHandler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref EnvironmentName
+          LOCAL_WEB_CLIENT_URL: http://localhost:8080
+          DEV_WEB_CLIENT_URL: !GetAtt WebClientBucket.WebsiteURL
+
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/login
+            Method: post
+
+        OptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/login
+            Method: options
+
+  LogoutLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/logout
+      Handler: logout.lambdaHandler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref EnvironmentName
+          LOCAL_WEB_CLIENT_URL: http://localhost:8080
+          DEV_WEB_CLIENT_URL: !GetAtt WebClientBucket.WebsiteURL
+
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/logout
+            Method: post
+
+        OptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/logout
+            Method: options
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -69,6 +123,8 @@ Resources:
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
+        # Since we're serving an SPA and the routing is client-side, the backend must always fallback to index.html.
+        ErrorDocument: index.html
 
   WebClientBucketPolicy:
     Type: AWS::S3::BucketPolicy

@@ -1,5 +1,8 @@
 {
   "name": "authenticate",
   "version": "0.0.1",
-  "main": "authenticate.js"
+  "main": "authenticate.js",
+  "dependencies": {
+    "cookie": "^0.4.1"
+  }
 }

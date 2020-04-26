@@ -11,8 +11,6 @@
  *
  */
 
-const cookie = require("cookie");
-
 const WEB_CLIENT_URL = {
   local: process.env.LOCAL_WEB_CLIENT_URL,
   dev: process.env.DEV_WEB_CLIENT_URL,
@@ -35,26 +33,34 @@ function withCatchAll(fn) {
 const corsHeaders = {
   "Access-Control-Allow-Origin": WEB_CLIENT_URL,
   "Access-Control-Allow-Credentials": "true",
-  "Access-Control-Allow-Methods": "GET",
+  "Access-Control-Allow-Methods": "OPTIONS, POST",
   "Access-Control-Allow-Headers": "origin, content-type, accept, cookie",
 };
 
-exports.lambdaHandler = withCatchAll(async (event, context) => {
-  console.log(event);
-  const cookies = cookie.parse(event.headers.Cookie || "");
-  console.log(JSON.stringify(cookies));
+function validateInputs(event) {
+  return null;
+}
 
-  if (cookies["ergo-one-session-id"] !== "123") {
+exports.lambdaHandler = withCatchAll(async (event, context) => {
+  if (event.httpMethod === "OPTIONS") {
+    return { headers: corsHeaders };
+  }
+
+  console.log(event);
+  const validationErrors = validateInputs(event);
+  if (validationErrors) {
     return {
-      headers: corsHeaders,
-      statusCode: 403,
-      body: JSON.stringify({ message: "None shall pass" }),
+      headers: { ...corsHeaders },
+      statusCode: 400,
+      body: JSON.stringify({ message: "Bad Request" }),
     };
   }
 
   return {
-    headers: corsHeaders,
+    headers: {
+      ...corsHeaders,
+      "set-cookie": "ergo-one-session-id=123; max-age=0",
+    },
     statusCode: 200,
-    body: JSON.stringify({ user: { username: "magali" } }),
   };
 });
