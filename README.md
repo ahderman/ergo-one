@@ -2,61 +2,97 @@
 
 ## Description
 
-Outils pour faciliter la création d'un bilan en ergothérapie.
+The purpose of the tool we are developing is explained in [Objectives](doc/objectives.md).
 
-## Cahier des charges
+Currently, a live demo is running here: http://ergo-one-dev-webclientbucket-ionyhjid8p2l.s3-website.eu-central-1.amazonaws.com
 
-### Pour le patient
+## Development
 
-Le patient doit pouvoir:
+### Prerequisites
 
-- accéder à sa fiche de renseignements personnalisée
-- remplir sa fiche de renseignements personnalisée
-- modifier sa fiche de renseignements personnalisée
-- imprimer sa fiche de renseignements pour la remplir à la main
+- Python and Pip
+- NodeJS and Yarn
+- an account on AWS
+- credentials for AWS named "ergo-one-developer" in your _\$HOME/.aws/credentials_ file.
 
-### Pour l'ergothérapeute
+#### Setup
 
-L'ergothérapeute doit pouvoir:
+Now you should run:
 
-- remplir la fiche de renseignements de n'importe quel patient
-- remplir l'anamnèse de n'importe quel patient
-- remplir la trame de bilan de n'importe quel patient
-- remplir le bilan de n'importe quel patient
-- accéder et modifier ces données même en l'absence d'une connection - la synchronisation se fait dès la connection rétablie
-- envoyer chacun de ces documents par e-mail (pdf, word?)
-- envoyer à chaque patient un lien vers sa fiche de renseignements personnalisée
-- préremplir le bilan du patient sur base des réponses présentes dans les autres documents
+- `yarn install-python-requirements` to install the python packages needed to run the AWS CLI
+- `yarn install` to install nodejs dependencies for the backend
+- `cd web-client && yarn install` to install nodejs dependencies for the frontend
 
-### Sécurité
+#### IDE Setup
 
-- Seule la fiche de renseignements peut être accessible sans s'enregistrer
+This project uses [Prettier](https://prettier.io/) to enforce a uniform coding style. Every developer should set up
+their set up their IDE/editor of choice to automatically format code using Prettier whenever a file is saved.
 
-## Liens utiles
+On WebStorm, the following scope is used:
+`(file:*.ts||file:*.js||file:*.json||file:*.css||file:*.scss||file:*.vue||file:*.html||file:*.md||file:*.yml||file:*.yaml)&&!(file:*/coverage//*||file:*/dist//*)`
+
+More instructions can be found on the following page: https://prettier.io/docs/en/editors.html.
+
+### Create the S3 Bucket used by SAM CLI to deploy
+
+```sh
+yarn create-sam-bucket
+```
+
+### Deploy a personal stack
+
+#### Backend
+
+In order to deploy your own backend stack on AWS, use the following command:
+
+```sh
+yarn build-and-deploy:backend:dev
+```
+
+The outputs displayed at the end of the deployment indicate the URLs of both:
+
+- the API Gateway that serves the backend API
+- the S3 Bucket that serves the web client (read on for instructions to populate the bucket)
+
+#### Frontend
+
+In order to deploy the frontend to the S3 Bucket created in the step above, use the following command:
+
+```sh
+yarn build-and-deploy:frontend:dev
+```
+
+You can now access the frontend from http://localhost:8080.
+
+### Local deployment
+
+#### Backend
+
+In order to run the backend locally, use the following command:
+
+```sh
+yarn build-and-deploy:backend:local
+```
+
+You can now access the backend on http://localhost:3000.
+
+**Note:** Only the API Gateway and the Lambdas are deployed locally. The rest of the infrastructure, including DynamoDB,
+must still be deployed on AWS for the application to work.
+
+#### Frontend
+
+In order to run the frontend locally, use the following command:
+
+```sh
+yarn build-and-deploy:frontend:local
+```
+
+You can now access the frontend from http://localhost:8080.
+
+## Useful links
 
 - [Offline Storage for Progressive Web Apps](https://developers.google.com/web/fundamentals/instant-and-offline/web-storage/offline-for-pwa)
 - [IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
 - [marked-forms](https://github.com/jldec/marked-forms)
 - [marksup](https://github.com/bosky101/marksup)
 - [wmd fork](https://github.com/brikis98/wmd)
-
-## Développement
-
-### Objectif n.1
-
-- L'ergothérapeute peut accéder au site au moyen d'un identifiant + mot de passe
-- L'ergothérapeute peut remplir l'anamnèse pour un patient et la sauver
-- L'ergothérapeute peut remplir le bilan pour un patient et le sauver
-
-### Objectif n.2
-
-- L'ergothérapeute peut préremplir les champs du bilan sur base des champs de l'anamnèse
-
-### Objectif n.3
-
-- L'ergothérapeute peut modifier le formulaire de l'anamnèse en:
-  - ajoutant des champs
-  - supprimant des champs
-  - changeant la formulation de certaines questions
-  - modifiant le type des champs (texte, nombre)
-- Un formulaire déjà rempli conserve tous ses champs, même si certains ont été enlevés/modifiés par l'ergothérapeute dans le template
