@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import LoginPage from "../views/LoginPage.vue";
+import AnamnesePage from "../views/AnamnesePage.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "LoginPage",
     component: LoginPage,
+  },
+  {
+    path: "/anamnese",
+    name: "AnamnesePage",
+    component: AnamnesePage,
   },
 ];
 

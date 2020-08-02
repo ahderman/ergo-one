@@ -1,0 +1,9 @@
+{
+  "name": "put-anamnese",
+  "version": "0.0.1",
+  "main": "put-anamnese.js",
+  "dependencies": {
+    "aws-sdk": "^2.673.0",
+    "cookie": "^0.4.1"
+  }
+}

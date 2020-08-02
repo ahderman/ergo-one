@@ -21,6 +21,7 @@
     "logs": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 sam logs --stack-name ${STACK_NAME} -n ${LAMBDA_NAME}",
     "logs:RootLambda": "cross-env STACK_NAME=ergo-one-dev LAMBDA_NAME=RootLambda yarn logs",
     "logs:AuthenticateLambda": "cross-env STACK_NAME=ergo-one-dev LAMBDA_NAME=AuthenticateLambda yarn logs",
+    "logs:GetAnamneseLambda": "cross-env STACK_NAME=ergo-one-dev LAMBDA_NAME=GetAnamneseLambda yarn logs",
     "test:backend:local": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=http://localhost:3000 jest e2e-tests/",
     "test:backend:dev": "cross-env AWS_PROFILE=ergo-one-developer AWS_REGION=us-central-1 BASE_URL=$(yarn -s get-api-gateway-url:dev) jest e2e-tests/",
     "test:backend:unit": "jest api/",
@@ -35,9 +36,15 @@
   "dependencies": {
     "aws-sdk": "^2.656.0",
     "cookie": "^0.4.1",
+    "marked": "^1.0.0",
+    "marked-forms": "^3.1.0",
+    "throttle-debounce": "^2.1.0",
     "vue-feather-icons": "^5.0.0"
   },
   "devDependencies": {
+    "@types/marked": "^0.7.4",
+    "@types/throttle-debounce": "^2.1.0",
+    "@types/vue-feather-icons": "^5.0.0",
     "aws-sdk-mock": "^5.1.0",
     "cross-env": "^7.0.2",
     "jest": "^25.3.0",

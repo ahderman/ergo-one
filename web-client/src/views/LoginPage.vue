@@ -41,14 +41,12 @@ export default {
   },
   methods: {
     async login() {
-      console.log(this.credentials);
       await this.$store.dispatch("authentication/login", this.credentials);
       await this.$store.dispatch("authentication/authenticate");
     },
   },
   watch: {
     isAuthenticated() {
-      console.log("isAuthenticated()");
       this.$router.push({ name: "HomePage" });
     },
   },

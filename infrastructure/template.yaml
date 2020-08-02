@@ -19,6 +19,11 @@ Parameters:
       - dev
 
 Resources:
+  DocumentsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: documents-table-dev
+
   HelloWorldLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -109,6 +114,61 @@ Resources:
           Properties:
             RestApiId: !Ref ApiGateway
             Path: /api/logout
+            Method: options
+
+  GetAnamneseLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/get-anamnese
+      Handler: get-anamnese.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref DocumentsTable
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref EnvironmentName
+          LOCAL_WEB_CLIENT_URL: http://localhost:8080
+          DEV_WEB_CLIENT_URL: !GetAtt WebClientBucket.WebsiteURL
+          DOCUMENTS_TABLE_NAME: documents-table-dev
+
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/anamnese
+            Method: get
+
+  SaveAnamneseLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../api/put-anamnese
+      Handler: put-anamnese.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref DocumentsTable
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref EnvironmentName
+          LOCAL_WEB_CLIENT_URL: http://localhost:8080
+          DEV_WEB_CLIENT_URL: !GetAtt WebClientBucket.WebsiteURL
+          DOCUMENTS_TABLE_NAME: documents-table-dev
+
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/anamnese
+            Method: put
+
+        OptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /api/anamnese
             Method: options
 
   ApiGateway:

@@ -5,12 +5,13 @@
         <img alt="Logo" src="../assets/logo-magali.png" />
       </router-link>
     </div>
-    <div :class="$style.sidebar">
+    <nav :class="$style.sidebar">
+      <router-link :to="{ name: 'AnamnesePage' }">Anamnèse</router-link>
       <button :class="$style.logoutButton" @click="logout">
         <log-out-icon :class="$style.buttonIcon" size="2x" />
         <span>Déconnexion</span>
       </button>
-    </div>
+    </nav>
     <div :class="$style.main">
       <p>Salut Mag. Tu es connectée.</p>
     </div>
@@ -49,7 +50,7 @@ export default {
   grid-row: 2;
   grid-column: 1;
   background-color: yellowgreen;
-  padding-top: 20px;
+  padding: 20px 10px;
 
   .logoutButton {
     background-color: yellowgreen;
@@ -60,6 +61,7 @@ export default {
     border: none;
     width: 100%;
     padding: 5px 10px;
+    border-radius: 5px;
 
     .buttonIcon {
       margin-right: 10px;
