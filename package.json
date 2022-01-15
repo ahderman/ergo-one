@@ -36,7 +36,7 @@
   "dependencies": {
     "aws-sdk": "^2.656.0",
     "cookie": "^0.4.1",
-    "marked": "^1.0.0",
+    "marked": "^4.0.10",
     "marked-forms": "^3.1.0",
     "throttle-debounce": "^2.1.0",
     "vue-feather-icons": "^5.0.0"
